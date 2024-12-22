@@ -52,8 +52,8 @@ Ensure you have the following installed on your system:
 
 ## Demo purpose
 
-### Please refer to `demo.mp4` for a sample demo or you can run the file `./run.sh` for running. It contains built files and jars for easier running and automates the build tasks.
-### If any issues are faced, you can try running individual services
+### Please refer to `dropface.mp4` for a sample demo.
+### You can also try running individual services.
 
 ## Individual running
 
@@ -61,6 +61,7 @@ Ensure you have the following installed on your system:
 1. Navigate to the `backend/` folder.
 2. Build the Spring Boot application:
    ```bash
+   export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED"
    mvn clean install
    ```
 3. Start the MySQL container:
@@ -71,6 +72,10 @@ Ensure you have the following installed on your system:
    ```bash
    mvn spring-boot:run
    ```
+
+You can alternatively run 
+```java -jar target/dropface-0.0.1-SNAPSHOT.jar```
+to directly run the backend application.
 
 ### Frontend Setup
 1. Navigate to the `frontend/` folder.
