@@ -19,32 +19,30 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(AuthRequest request) {
-        var user = User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+    // Logins or Register the user and return a JWT token
+    public AuthResponse loginOrRegister(AuthRequest request) {
+        // Try to find the user by email
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
 
-        userRepository.save(user);
-        var token = jwtService.generateToken(user);
+        if (user == null) {
+            // If the user doesn't exist, create a new user
+            user = User.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .build();
+            userRepository.save(user);
+        } else {
+            // If the user exists, authenticate
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        }
 
-        return AuthResponse.builder()
-                .token(token)
-                .email(user.getEmail())
-                .build();
-    }
-
-    public AuthResponse authenticate(AuthRequest request) {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()
-            )
-        );
-
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var token = jwtService.generateToken(user);
+        // Generate a JWT token
+        String token = jwtService.generateToken(user);
 
         return AuthResponse.builder()
                 .token(token)

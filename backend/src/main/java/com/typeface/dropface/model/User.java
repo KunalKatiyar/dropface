@@ -15,6 +15,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+    * Represents a user of the application.
+    * <p>
+    *    This class is used to store information about a user of the application.
+    *    It contains the following fields:
+    *    <ul>
+    *      <li>id: the unique identifier of the user</li>
+    *      <li>email: the email address of the user</li>
+    *      <li>password: the password of the user</li>
+    *    </ul>
+    * <p>
+ */
 @Data
 @Builder
 @NoArgsConstructor
